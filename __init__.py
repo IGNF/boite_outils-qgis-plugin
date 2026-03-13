@@ -32,5 +32,5 @@ def classFactory(iface):  # pylint: disable=invalid-name
     :type iface: QgsInterface
     """
     #
-    from .topo_sem import TopoSem
-    return TopoSem(iface)
+    from .boite_outils import BoiteOutils
+    return BoiteOutils(iface)

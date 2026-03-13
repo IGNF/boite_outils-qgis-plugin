@@ -33,13 +33,13 @@ from qgis.PyQt.QtWidgets import QAction
 from qgis.core import QgsProject, QgsSnappingConfig, QgsVectorLayer, QgsPointXY
 
 # Import the code for the dialog
-from .topo_sem_dialog import TopoSemDialog
+from .boite_outils_dialog import BoiteOutilsDialog
 from .constantes import *
 from .rech_cleabs import *
 from .copie_attributs import *
 
 
-class TopoSem:
+class BoiteOutils:
     """QGIS Plugin Implementation."""
 
     def __init__(self, iface):
@@ -204,10 +204,10 @@ class TopoSem:
         if self.dlg is not None and self.dlg.isVisible():
             return
 
-        self.dlg = TopoSemDialog()
+        self.dlg = BoiteOutilsDialog()
 
         # show the dialog
-        self.dlg = TopoSemDialog()
+        self.dlg = BoiteOutilsDialog()
         self.dlg.setParent(self.iface.mainWindow())
         self.dlg.setWindowFlags(Qt.Dialog | Qt.WindowTitleHint | Qt.WindowCloseButtonHint)
         self.dlg.setWindowTitle(TITRE)

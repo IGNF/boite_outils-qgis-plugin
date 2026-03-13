@@ -1,0 +1,36 @@
+name: Release QGIS Plugin
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build-release:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install zip
+        run: sudo apt-get install zip -y
+
+      - name: Build plugin zip
+        run: |
+          mkdir -p IGN_boite_outils
+          rsync -av --progress . IGN_boite_outils/ \
+            --exclude .git \
+            --exclude .github \
+            --exclude IGN_boite_outils
+          zip -r IGN_boite_outils.zip IGN_boite_outils
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: "IGN_boite_outils.zip"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

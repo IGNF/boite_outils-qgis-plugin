@@ -21,21 +21,34 @@
  *                                                                         *
  ***************************************************************************/
 """
+import os
+import random
+
 from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QSizePolicy, QDialog, QMessageBox
+from PyQt5.uic import loadUi
 from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction
+from qgis.core import QgsProject, QgsSnappingConfig, QgsVectorLayer, QgsPointXY
 
 # Import the code for the dialog
 from .topo_sem_dialog import TopoSemDialog
 from .constantes import *
+from .rech_cleabs import *
+from .copie_attributs import *
+
 
 class TopoSem:
     """QGIS Plugin Implementation."""
 
     def __init__(self, iface):
+        self.btn_accroche = None
         self.dlg = None
         self.iface = iface
+
+        self.icon_accroche_rouge = QIcon(os.path.join(os.path.dirname(__file__), "icons", "icon_rouge.png"))
+        self.icon_accroche_vert = QIcon(os.path.join(os.path.dirname(__file__), "icons", "icon_vert.png"))
 
     def initGui(self):
         pass
@@ -43,6 +56,149 @@ class TopoSem:
 
     def unload(self):
         pass
+
+    def ini_tabwidget(self):
+        tab_geom = QWidget()
+        tab_attr = QWidget()
+        tab_rech = QWidget()
+        # supprime les 2 tab crées par qtdesigner
+        self.dlg.tabWidget.clear()
+        self.dlg.tabWidget.addTab(tab_geom, "Topo")
+        self.dlg.tabWidget.addTab(tab_attr, "Attr")
+        self.dlg.tabWidget.addTab(tab_rech, "Recherche")
+
+        self.dlg.tabWidget.setStyleSheet(CUSTOM_WIDGET[0])
+
+        # =========== init du tab "geom"==================
+        layout = QHBoxLayout()
+        layout.setContentsMargins(0, 0, 0, 0)
+        tab_geom.setLayout(layout)
+        btn_fusion = QPushButton("Fusion")
+        btn_blague = QPushButton("blagues")
+        self.btn_accroche = QPushButton()
+        btn_fusion.setToolTip("Fusion de linéaires")
+        self.btn_accroche.setToolTip("Mode d'accrochage pour déplacement d'entités")
+
+        if QgsProject.instance().topologicalEditing():
+            self.btn_accroche.setIcon(self.icon_accroche_rouge)
+        else:
+            self.btn_accroche.setIcon(self.icon_accroche_vert)
+
+        layout.addWidget(btn_fusion)
+        layout.addWidget(btn_blague)
+        layout.addWidget(self.btn_accroche)
+        # slot
+        btn_blague.clicked.connect(self.on_btn_blague)
+        self.btn_accroche.clicked.connect(self.on_btn_accroche)
+
+        # ===========init du tab "attr"==================
+        layout = QHBoxLayout()
+        layout.setContentsMargins(0, 0, 0, 0)
+        tab_attr.setLayout(layout)
+        btn_copie_attr = QPushButton("Copie d'attributs")
+        layout.addWidget(btn_copie_attr)
+        # slot
+        btn_copie_attr.clicked.connect(self.on_affiche_dial_copie_attr)
+
+        # ==========init du tab "rech"==================
+        layout = QHBoxLayout()
+        layout.setContentsMargins(0, 0, 0, 0)
+        tab_rech.setLayout(layout)
+        btn_rech_cleabs = QPushButton("Recherche par CLEABS")
+        btn_rech = QPushButton("Recherche")
+        layout.addWidget(btn_rech_cleabs)
+        layout.addWidget(btn_rech)
+        # slot
+        btn_rech_cleabs.clicked.connect(self.on_affiche_dial_rechcleabs)
+        btn_rech.clicked.connect(self.on_affiche_dial_rech)
+
+        self.dlg.adjustSize()
+        self.dlg.setFixedSize(self.dlg.size())
+
+    def on_affiche_dial_copie_attr(self):
+        self.dlg_copie_attr = CopieAttributsDialog(None,self.iface)
+        self.dlg_copie_attr.setWindowFlags(Qt.Window |Qt.WindowStaysOnTopHint | Qt.WindowCloseButtonHint)
+        self.dlg_copie_attr.setWindowTitle("Copie d'attributs")
+        self.dlg_copie_attr.show()
+        # self.dlg_copie_attr.actualiserSelection()
+        result = self.dlg_copie_attr.exec_()
+        if result == 0:
+            try:
+                # self.iface.mapCanvas().selectionChanged.disconnect(self.dlg_copie_attr.actualiserSelection)
+                layer = self.iface.activeLayer()
+                layer.selectionChanged.disconnect(self.dlg_copie_attr.actualiserSelection)
+            except TypeError:
+                pass  # aucune connexion existante
+
+    def on_affiche_dial_rechcleabs(self):
+        self.dlg_reche_cleabs = RechercheCleabsDialog(None,self.iface)
+        self.dlg_reche_cleabs.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.WindowCloseButtonHint)
+        self.dlg_reche_cleabs.setWindowTitle("Recherche par CLEABS")
+        self.dlg_reche_cleabs.setFixedSize(self.dlg_reche_cleabs.size())
+        self.dlg_reche_cleabs.show()
+
+    def on_affiche_dial_rech(self):
+        pass
+
+
+    def on_btn_blague(self):
+        path = os.path.join(os.path.dirname(__file__), "configure.txt")
+        if os.path.exists(path):
+            with open(path, "r",encoding="latin-1") as f:
+                lignes = f.readlines()
+            ligne_aleatoire = random.choice(lignes).strip()
+            QMessageBox.information(None,"blagues",ligne_aleatoire)
+        else:
+            QMessageBox.warning(None,"blagues","fichier introuvable")
+        return None
+
+    def on_btn_accroche(self):
+        projet = QgsProject.instance()
+
+        if projet.topologicalEditing():
+            self.btn_accroche.setIcon(self.icon_accroche_vert)
+            projet.setTopologicalEditing(False)
+        else:
+            self.btn_accroche.setIcon(self.icon_accroche_rouge)
+            projet.setTopologicalEditing(True)
+
+            # self.iface.activeLayer().vertexMoved.connect(self.on_vertex_moved)
+
+            # passer toutes les couches en edition topologique
+            # for layer in QgsProject.instance().mapLayers().values():
+            #     if isinstance(layer, QgsVectorLayer) and not layer.isEditable():
+            #         layer.startEditing()
+            # snapping = projet.snappingConfig()
+            # snapping.setEnabled(True)
+            # snapping.setMode(QgsSnappingConfig.SnappingMode.AllLayers)
+            # projet.setSnappingConfig(snapping)
+
+    # def on_vertex_moved(fid, vertex_id, old_pos, new_pos):
+    #     """
+    #     fid      : ID de l'entité
+    #     vertex_id: indice du vertex
+    #     old_pos  : QgsPointXY avant déplacement
+    #     new_pos  : QgsPointXY après déplacement
+    #     """
+    #     print(f"Vertex {vertex_id} de l'entité {fid} déplacé")
+    #     print("Old position:", old_pos, "New position:", new_pos)
+
+    # def get_layers_pt_commun(self,point):
+    #     """
+    #     Retourne la liste des couches vectorielles ayant un sommet exactement sur 'point'
+    #     """
+    #     layers_to_edit = []
+    #     for layer in QgsProject.instance().mapLayers().values():
+    #         if isinstance(layer, QgsVectorLayer):
+    #             for feat in layer.getFeatures():
+    #                 geom = feat.geometry()
+    #                 if geom.type() == 0:  # 0 = point, 1 = ligne, 2 = polygone
+    #                     # Pour les lignes/polygones, on check chaque vertex
+    #                     vertices = geom.vertices()
+    #                     if any(QgsPointXY(v) == point for v in vertices):
+    #                         layers_to_edit.append(layer)
+    #                         break
+    #     return layers_to_edit
 
     def run(self):
         if self.dlg is not None and self.dlg.isVisible():
@@ -56,6 +212,9 @@ class TopoSem:
         self.dlg.setWindowFlags(Qt.Dialog | Qt.WindowTitleHint | Qt.WindowCloseButtonHint)
         self.dlg.setWindowTitle(TITRE)
         self.dlg.show()
+
+        self.ini_tabwidget()
+
         # Run the dialog event loop
         result = self.dlg.exec_()
         # See if OK was pressed

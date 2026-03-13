@@ -153,6 +153,8 @@ class BoiteOutils:
         return None
 
     def on_btn_accroche(self):
+        # fonctionne uniquement sur le layer actif (pour l'instant)
+        # à voir si pertinent en multilayer)
         projet = QgsProject.instance()
 
         if projet.topologicalEditing():
@@ -201,6 +203,11 @@ class BoiteOutils:
     #     return layers_to_edit
 
     def run(self):
+        project = QgsProject.instance()
+        if not project.fileName():
+            QMessageBox.warning(None, "Avertissement", "Aucun projet chargé")
+            return
+
         if self.dlg is not None and self.dlg.isVisible():
             return
 

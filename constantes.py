@@ -5,6 +5,8 @@ CHAMPS_INTERDIT = ["id_sqlite_1gnQg1s","gcms_fingerprint"]
 
 COLOR_LIGNE_COMMUNE = "#46a200"
 COLOR_LIGNE_DIFF = "#dfdfdf"
+
+# style des lignes sélectionnées
 STYLE_TABLEWIDGET = ["""QTableWidget::item:selected {background-color: #46a200;}"""]
 
 

@@ -168,29 +168,32 @@ class CopieAttributsDialog(QDialog):
 
         attributs_commun = self.get_attributs_commun(self.get_other_selected_features())
 
-
         for i, champ in enumerate(champs):
             item_champ = QTableWidgetItem(champ)
-            # item_champ.setBackground(QColor(COLOR_LIGNE_DIFF))
             item_first = QTableWidgetItem(str(self.get_first_selected_feature()[champ]))
-            # item_first.setBackground(QColor(COLOR_LIGNE_DIFF))
             item_autre = QTableWidgetItem(str(attributs_commun[champ]))
 
             if self.get_first_selected_feature()[champ] != attributs_commun[champ]:
                 self.tableWidget.selectRow(i)
-            # else:
-                # item_autre.setBackground(QColor(COLOR_LIGNE_DIFF))
-
 
             self.tableWidget.setItem(i, 0, item_champ)
-
             self.tableWidget.setItem(i, 1, item_first)
             self.tableWidget.setItem(i, 2, item_autre)
 
     def copier_attributs(self):
-        print("sel order = ",self.selection_order)
         # TODO : ne pas copier les attributs en lecture seuls.
-        # gerer la selection de la ligne entiere
-        # par defaut les lignes vertes sont considerés comme sélectionnées
-        # si on selectionne d'aitres lignes , faut les passer en vert
+        ident_source = self.selection_order[0]
+        idents_cible = self.selection_order[1:]
+        print("entités source = ", ident_source)
+        print("entités cibles = ",idents_cible)
+
+        # Récupérer les lignes sélectionnées
+        lignes_selectionnees = set(item.row() for item in self.tableWidget.selectedItems())
+        champs_modifie = []
+        for ligne in lignes_selectionnees:
+            # Récupérer l'item de la première colonne
+            item_champ = self.tableWidget.item(ligne, 0)
+            if item_champ:  # Vérifie qu'il existe
+                champs_modifie.append(item_champ.text())
+        print(champs_modifie)
 

@@ -32,22 +32,22 @@
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">
     <layout class="QGridLayout" name="gridLayout">
-     <item row="1" column="2">
+     <item row="1" column="3">
       <widget class="QPushButton" name="pushButton_copier">
        <property name="text">
         <string>Copier</string>
        </property>
       </widget>
      </item>
-     <item row="0" column="0" colspan="6">
+     <item row="0" column="0" colspan="7">
       <widget class="QTableWidget" name="tableWidget">
        <property name="selectionMode">
         <enum>QAbstractItemView::ExtendedSelection</enum>
        </property>
       </widget>
      </item>
-     <item row="1" column="0">
-      <spacer name="horizontalSpacer">
+     <item row="1" column="4">
+      <spacer name="horizontalSpacer_2">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
@@ -59,15 +59,22 @@
        </property>
       </spacer>
      </item>
-     <item row="1" column="4">
+     <item row="1" column="5">
       <widget class="QLabel" name="label_nbsel">
        <property name="text">
         <string>TextLabel</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="3">
-      <spacer name="horizontalSpacer_2">
+     <item row="1" column="1">
+      <widget class="QPushButton" name="pushButton_deselectionne">
+       <property name="text">
+        <string>tout désélectionner</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <spacer name="horizontalSpacer">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>

@@ -2,7 +2,7 @@ import os
 
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QColor, QFont, QBrush
-from PyQt5.QtWidgets import QDialog, QTableWidgetItem, QAbstractItemView
+from PyQt5.QtWidgets import QDialog, QTableWidgetItem, QAbstractItemView, QTableWidgetSelectionRange
 from PyQt5.uic import loadUi
 
 from .constantes import *
@@ -29,6 +29,8 @@ class CopieAttributsDialog(QDialog):
             self.actualiserSelection([], [], False)
 
         self.pushButton_copier.clicked.connect(self.copier_attributs)
+
+        self.pushButton_deselectionne.clicked.connect(self.deselectionne_all_lignes)
 
         self.ini_tabwidget()
 
@@ -71,6 +73,7 @@ class CopieAttributsDialog(QDialog):
         self.tableWidget.setRowCount(0)
         self.tableWidget.setStyleSheet(STYLE_TABLEWIDGET[0])
         self.tableWidget.setSelectionMode(QAbstractItemView.MultiSelection)
+        # self.tableWidget.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.tableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.tableWidget.setSelectionBehavior(QAbstractItemView.SelectRows)
 
@@ -138,6 +141,8 @@ class CopieAttributsDialog(QDialog):
             if fid in self.selection_order:
                 self.selection_order.remove(fid)
 
+    def deselectionne_all_lignes(self):
+        self.tableWidget.clearSelection()
 
     def actualiserSelection(self, selected=None, deselected=None, clear_and_select=None):
         if not self.isVisible():
@@ -154,6 +159,8 @@ class CopieAttributsDialog(QDialog):
         if self.layer is None:
             return
 
+        self.tableWidget.clearSelection()
+
         self.get_ordre_selection(selected, deselected, clear_and_select)
 
         nb_sel = self.layer.selectedFeatureCount()
@@ -164,7 +171,6 @@ class CopieAttributsDialog(QDialog):
         champs = self.get_champs()
 
         self.tableWidget.setRowCount(len(champs))
-        self.tableWidget.clearSelection()
 
         attributs_commun = self.get_attributs_commun(self.get_other_selected_features())
 
@@ -176,24 +182,42 @@ class CopieAttributsDialog(QDialog):
             if self.get_first_selected_feature()[champ] != attributs_commun[champ]:
                 self.tableWidget.selectRow(i)
 
+            # si readonly --> ITEM en rouge
+            if self.isreadonly(self.layer, champ):
+                item_champ.setForeground(QBrush(QColor("red")))
+                # deselection de la ligne correspondante
+                self.tableWidget.setRangeSelected(QTableWidgetSelectionRange(i, 0, i, self.tableWidget.columnCount()-1), False)
+
             self.tableWidget.setItem(i, 0, item_champ)
             self.tableWidget.setItem(i, 1, item_first)
             self.tableWidget.setItem(i, 2, item_autre)
 
+    def isreadonly(self,layer,champ):
+        index = layer.fields().indexOf(champ)
+        form_config = layer.editFormConfig()
+        read_only = form_config.readOnly(index)
+        return read_only
+
     def copier_attributs(self):
-        # TODO : ne pas copier les attributs en lecture seuls.
         ident_source = self.selection_order[0]
         idents_cible = self.selection_order[1:]
-        print("entités source = ", ident_source)
-        print("entités cibles = ",idents_cible)
 
         # Récupérer les lignes sélectionnées
         lignes_selectionnees = set(item.row() for item in self.tableWidget.selectedItems())
-        champs_modifie = []
+        champs_modifie = {}
+
         for ligne in lignes_selectionnees:
-            # Récupérer l'item de la première colonne
-            item_champ = self.tableWidget.item(ligne, 0)
-            if item_champ:  # Vérifie qu'il existe
-                champs_modifie.append(item_champ.text())
-        print(champs_modifie)
+        # Récupérer l'item de la première colonne
+            champ = self.tableWidget.item(ligne, 0)
+            index_champ = self.layer.fields().indexFromName(champ.text())
+            if index_champ != -1 and not self.isreadonly(self.layer, champ.text()):  # Vérifie qu'il existe et qu'il est bien en ecriture
+                valeur = self.get_first_selected_feature()[champ.text()]
+                champs_modifie[index_champ] = valeur
+
+        # Préparation du dictionnaire pour changeAttributeValues
+        attrs_to_change = {int(fid): champs_modifie for fid in idents_cible}
+
+        self.layer.startEditing()
+        self.layer.dataProvider().changeAttributeValues(attrs_to_change)
+
 

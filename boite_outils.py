@@ -24,7 +24,7 @@
 import os
 import random
 
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QSize
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QSizePolicy, QDialog, QMessageBox
 from PyQt5.uic import loadUi
 from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication
@@ -49,6 +49,7 @@ class BoiteOutils:
 
         self.icon_accroche_rouge = QIcon(os.path.join(os.path.dirname(__file__), "icons", "icon_rouge.png"))
         self.icon_accroche_vert = QIcon(os.path.join(os.path.dirname(__file__), "icons", "icon_vert.png"))
+        self.icon_blague = QIcon(os.path.join(os.path.dirname(__file__), "icons", "blagues.png"))
 
     def initGui(self):
         pass
@@ -74,8 +75,18 @@ class BoiteOutils:
         layout.setContentsMargins(0, 0, 0, 0)
         tab_geom.setLayout(layout)
         btn_fusion = QPushButton("Fusion")
-        btn_blague = QPushButton("blagues")
+        btn_fusion.setFixedHeight(HAUTEUR_BTN)
+        btn_blague = QPushButton("")
+        btn_blague.setFixedHeight(HAUTEUR_BTN)
+        btn_blague.setIcon(self.icon_blague)
+        btn_blague.setIconSize(QSize(25, 25))
+        btn_blague.setStyleSheet("""
+            QPushButton {
+                padding: 0px;
+            }
+        """)
         self.btn_accroche = QPushButton()
+        self.btn_accroche.setFixedHeight(HAUTEUR_BTN)
         btn_fusion.setToolTip("Fusion de linéaires")
         self.btn_accroche.setToolTip("Mode d'accrochage pour déplacement d'entités")
 
@@ -96,6 +107,7 @@ class BoiteOutils:
         layout.setContentsMargins(0, 0, 0, 0)
         tab_attr.setLayout(layout)
         btn_copie_attr = QPushButton("Copie d'attributs")
+        btn_copie_attr.setFixedHeight(HAUTEUR_BTN)
         layout.addWidget(btn_copie_attr)
         # slot
         btn_copie_attr.clicked.connect(self.on_affiche_dial_copie_attr)
@@ -105,7 +117,9 @@ class BoiteOutils:
         layout.setContentsMargins(0, 0, 0, 0)
         tab_rech.setLayout(layout)
         btn_rech_cleabs = QPushButton("Recherche par CLEABS")
+        btn_rech_cleabs.setFixedHeight(HAUTEUR_BTN)
         btn_rech = QPushButton("Recherche")
+        btn_rech.setFixedHeight(HAUTEUR_BTN)
         layout.addWidget(btn_rech_cleabs)
         layout.addWidget(btn_rech)
         # slot

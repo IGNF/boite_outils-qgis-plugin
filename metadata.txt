@@ -3,9 +3,9 @@
 # This file should be included when you package your plugin.# Mandatory items:
 
 [general]
-name=IGN Topologie - Sémantique
+name=IGN Boite à outils
 qgisMinimumVersion=3.0
-description=Outil de topologie - sémantique
+description=Regroupement de diverses fonctionnalités génériques
 version=0.1
 author=Gérôme PECHEUR (IGN)
 email=gerome.pecheur@ign.fr

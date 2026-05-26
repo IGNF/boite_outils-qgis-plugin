@@ -22,6 +22,7 @@
  ***************************************************************************/
 """
 import random
+import webbrowser
 
 from qgis.PyQt.QtCore import QSize
 from qgis.PyQt.QtWidgets import QWidget, QHBoxLayout, QPushButton,  QMessageBox
@@ -52,6 +53,17 @@ class BoiteOutils:
 
     def unload(self):
         pass
+
+    def on_btn_apropos(self):
+        dlgAProposDe = QDialog()
+        loadUi(os.path.join(os.path.dirname(__file__), "dial/aproposde.ui"), dlgAProposDe)
+        dlgAProposDe.setWindowFlags(WindowStaysOnTopHint | WindowCloseButtonHint)
+        dlgAProposDe.setWindowTitle(f"{TITRE}")
+        dlgAProposDe.pushButtonAffichedoc.clicked.connect(self.afficheDoc)
+        dlgAProposDe.exec()
+
+    def afficheDoc(self):
+        webbrowser.open("https://ignf.github.io/blabla/")
 
     def ini_tabwidget(self):
         tab_geom = QWidget()
@@ -120,6 +132,9 @@ class BoiteOutils:
         # slot
         btn_rech_cleabs.clicked.connect(self.on_affiche_dial_rechcleabs)
         btn_rech.clicked.connect(self.on_affiche_dial_rech)
+
+        # ========= bouton a propos ==================
+        self.dlg.pushButton_apropos.clicked.connect(self.on_btn_apropos)
 
         self.dlg.adjustSize()
         self.dlg.setFixedSize(self.dlg.size())

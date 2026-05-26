@@ -1,5 +1,7 @@
-from PyQt5.QtCore import Qt, QTimer
+from qgis.PyQt.QtCore import QTimer
 from qgis.gui import QgsHighlight
+
+from .mapping_version import *
 
 
 def clignoter_feature(layer, feature, canvas, duree=1000, intervalle=300):
@@ -11,7 +13,7 @@ def clignoter_feature(layer, feature, canvas, duree=1000, intervalle=300):
     intervalle : intervalle entre visible/invisible en ms
     """
     highlight = QgsHighlight(canvas, feature.geometry(), layer)
-    highlight.setColor(Qt.yellow)
+    highlight.setColor(yellow)
     highlight.setWidth(5)
 
     # pour clignoter

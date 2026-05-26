@@ -1,9 +1,8 @@
 import os
 
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QColor, QFont, QBrush
-from PyQt5.QtWidgets import QDialog, QTableWidgetItem, QAbstractItemView, QTableWidgetSelectionRange
-from PyQt5.uic import loadUi
+from qgis.PyQt.QtGui import QColor, QFont, QBrush
+from qgis.PyQt.QtWidgets import QDialog, QTableWidgetItem, QAbstractItemView, QTableWidgetSelectionRange
+from qgis.PyQt.uic import loadUi
 
 from .constantes import *
 COLOR_LIGNE_COMMUNE = "#46a200"

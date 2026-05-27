@@ -22,6 +22,9 @@ try :
     # YesRole = QMessageBox.ButtonRole.YesRole
     # AcceptRole = QMessageBox.ButtonRole.AcceptRole
     # NoSelection = QAbstractItemView.SelectionMode.NoSelection
+    MultiSelection = QAbstractItemView.SelectionMode.MultiSelection
+    NoEditTriggers = QAbstractItemView.EditTrigger.NoEditTriggers
+    SelectRows = QAbstractItemView.SelectionBehavior.SelectRows
     # CustomContextMenu = Qt.ContextMenuPolicy.CustomContextMenu
     WaitCursor = Qt.CursorShape.WaitCursor
     # Horizontal = Qt.Orientation.Horizontal
@@ -50,6 +53,9 @@ except :
     # YesRole = QMessageBox.YesRole
     # AcceptRole = QMessageBox.AcceptRole
     # NoSelection = QListWidget.NoSelection
+    MultiSelection = QAbstractItemView.MultiSelection
+    NoEditTriggers = QAbstractItemView.NoEditTriggers
+    SelectRows = QAbstractItemView.SelectRows
     # CustomContextMenu = Qt.CustomContextMenu
     WaitCursor = Qt.WaitCursor
     # Horizontal = Qt.Horizontal

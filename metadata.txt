@@ -7,13 +7,13 @@ name=IGN Boite à outils
 qgisMinimumVersion=3.0
 qgisMaximumVersion=4.99
 description=Regroupement de diverses fonctionnalités génériques
-version=0.1.0_recette
+version=0.2.0
 author=Gérôme PECHEUR (IGN)
 email=gerome.pecheur@ign.fr
 
 about=
 
-homepage=http://homepage
+homepage=https://ignf.github.io/boite_outils-qgis-plugin/
 tracker=https://github.com/IGNF/boite_outils-qgis-plugin/issues
 repository=https://github.com/IGNF/boite_outils-qgis-plugin
 # End of mandatory metadata

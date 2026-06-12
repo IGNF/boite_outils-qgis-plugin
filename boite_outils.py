@@ -21,22 +21,18 @@
  *                                                                         *
  ***************************************************************************/
 """
-import os
 import random
+import webbrowser
 
-from PyQt5.QtCore import Qt, QSize
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QSizePolicy, QDialog, QMessageBox
-from PyQt5.uic import loadUi
-from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication
+from qgis.PyQt.QtCore import QSize
+from qgis.PyQt.QtWidgets import QWidget, QHBoxLayout, QPushButton,  QMessageBox
 from qgis.PyQt.QtGui import QIcon
-from qgis.PyQt.QtWidgets import QAction
-from qgis.core import QgsProject, QgsSnappingConfig, QgsVectorLayer, QgsPointXY
 
 # Import the code for the dialog
 from .boite_outils_dialog import BoiteOutilsDialog
-from .constantes import *
 from .rech_cleabs import *
 from .copie_attributs import *
+from .mapping_version import *
 
 
 class BoiteOutils:
@@ -57,6 +53,17 @@ class BoiteOutils:
 
     def unload(self):
         pass
+
+    def on_btn_apropos(self):
+        dlgAProposDe = QDialog()
+        loadUi(os.path.join(os.path.dirname(__file__), "dial/aproposde.ui"), dlgAProposDe)
+        dlgAProposDe.setWindowFlags(WindowStaysOnTopHint | WindowCloseButtonHint)
+        dlgAProposDe.setWindowTitle(f"{TITRE}")
+        dlgAProposDe.pushButtonAffichedoc.clicked.connect(self.afficheDoc)
+        dlgAProposDe.exec()
+
+    def afficheDoc(self):
+        webbrowser.open("https://ignf.github.io/blabla/")
 
     def ini_tabwidget(self):
         tab_geom = QWidget()
@@ -126,16 +133,19 @@ class BoiteOutils:
         btn_rech_cleabs.clicked.connect(self.on_affiche_dial_rechcleabs)
         btn_rech.clicked.connect(self.on_affiche_dial_rech)
 
+        # ========= bouton a propos ==================
+        self.dlg.pushButton_apropos.clicked.connect(self.on_btn_apropos)
+
         self.dlg.adjustSize()
         self.dlg.setFixedSize(self.dlg.size())
 
     def on_affiche_dial_copie_attr(self):
         self.dlg_copie_attr = CopieAttributsDialog(None,self.iface)
-        self.dlg_copie_attr.setWindowFlags(Qt.Window |Qt.WindowStaysOnTopHint | Qt.WindowCloseButtonHint)
+        self.dlg_copie_attr.setWindowFlags(Window |WindowStaysOnTopHint | WindowCloseButtonHint)
         self.dlg_copie_attr.setWindowTitle("Copie d'attributs")
         self.dlg_copie_attr.show()
         # self.dlg_copie_attr.actualiserSelection()
-        result = self.dlg_copie_attr.exec_()
+        result = self.dlg_copie_attr.exec()
         if result == 0:
             try:
                 # self.iface.mapCanvas().selectionChanged.disconnect(self.dlg_copie_attr.actualiserSelection)
@@ -146,7 +156,7 @@ class BoiteOutils:
 
     def on_affiche_dial_rechcleabs(self):
         self.dlg_reche_cleabs = RechercheCleabsDialog(None,self.iface)
-        self.dlg_reche_cleabs.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.WindowCloseButtonHint)
+        self.dlg_reche_cleabs.setWindowFlags(WindowStaysOnTopHint | WindowCloseButtonHint)
         self.dlg_reche_cleabs.setWindowTitle("Recherche par CLEABS")
         self.dlg_reche_cleabs.setFixedSize(self.dlg_reche_cleabs.size())
         self.dlg_reche_cleabs.show()
@@ -230,14 +240,14 @@ class BoiteOutils:
         # show the dialog
         self.dlg = BoiteOutilsDialog()
         self.dlg.setParent(self.iface.mainWindow())
-        self.dlg.setWindowFlags(Qt.Dialog | Qt.WindowTitleHint | Qt.WindowCloseButtonHint)
+        self.dlg.setWindowFlags(Dialog | WindowTitleHint | WindowCloseButtonHint)
         self.dlg.setWindowTitle(TITRE)
         self.dlg.show()
 
         self.ini_tabwidget()
 
         # Run the dialog event loop
-        result = self.dlg.exec_()
+        result = self.dlg.exec()
         # See if OK was pressed
         if result:
             # Do something useful here - delete the line containing pass and

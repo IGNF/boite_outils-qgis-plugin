@@ -1,11 +1,11 @@
 import os
 
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QColor, QFont, QBrush
-from PyQt5.QtWidgets import QDialog, QTableWidgetItem, QAbstractItemView, QTableWidgetSelectionRange
-from PyQt5.uic import loadUi
+from qgis.PyQt.QtGui import QColor, QFont, QBrush
+from qgis.PyQt.QtWidgets import QDialog, QTableWidgetItem, QAbstractItemView, QTableWidgetSelectionRange
+from qgis.PyQt.uic import loadUi
 
 from .constantes import *
+from .mapping_version import *
 COLOR_LIGNE_COMMUNE = "#46a200"
 COLOR_LIGNE_DIFF = "#dfdfdf"
 
@@ -72,10 +72,9 @@ class CopieAttributsDialog(QDialog):
 
         self.tableWidget.setRowCount(0)
         self.tableWidget.setStyleSheet(STYLE_TABLEWIDGET[0])
-        self.tableWidget.setSelectionMode(QAbstractItemView.MultiSelection)
-        # self.tableWidget.setSelectionMode(QAbstractItemView.ExtendedSelection)
-        self.tableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        self.tableWidget.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.tableWidget.setSelectionMode(MultiSelection)
+        self.tableWidget.setEditTriggers(NoEditTriggers)
+        self.tableWidget.setSelectionBehavior(SelectRows)
 
     def get_champs(self):
         # Récupérer les champs de la couche active

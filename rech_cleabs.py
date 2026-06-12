@@ -1,9 +1,10 @@
 import os
-from PyQt5.QtWidgets import QDialog, QApplication
-from PyQt5.uic import loadUi
+from qgis.PyQt.QtWidgets import QDialog, QApplication
+from qgis.PyQt.uic import loadUi
 from qgis._core import QgsCoordinateTransform
 from qgis.core import QgsProject
 from .fonctions import *
+from .mapping_version import *
 
 
 class RechercheCleabsDialog(QDialog):
@@ -21,7 +22,7 @@ class RechercheCleabsDialog(QDialog):
 
     def on_btn_recherche_cleabs(self):
         # IMPORTANT : un id est unique pour un layer, pas pour tous les layers du projet
-        QApplication.setOverrideCursor(Qt.WaitCursor)
+        QApplication.setOverrideCursor(WaitCursor)
 
         # 1er cas : on connait la cleabs exemple : TRONROUT0000000010804221
         self.lineEdit_id.setText("")

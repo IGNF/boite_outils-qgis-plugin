@@ -10,6 +10,7 @@ description=Regroupement de diverses fonctionnalités génériques
 version=0.2.0
 author=Gérôme PECHEUR (IGN)
 email=gerome.pecheur@ign.fr
+license=GNU AGPL v3
 
 about=
 

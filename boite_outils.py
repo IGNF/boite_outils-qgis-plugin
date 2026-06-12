@@ -63,7 +63,7 @@ class BoiteOutils:
         dlgAProposDe.exec()
 
     def afficheDoc(self):
-        webbrowser.open("https://ignf.github.io/blabla/")
+        webbrowser.open("https://ignf.github.io/boite_outils-qgis-plugin/")
 
     def ini_tabwidget(self):
         tab_geom = QWidget()

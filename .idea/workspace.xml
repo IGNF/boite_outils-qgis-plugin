@@ -4,24 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="332a3f1d-e0e5-4971-b160-6fbc69902961" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/boite_outils.py" beforeDir="false" afterPath="$PROJECT_DIR$/boite_outils.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dial/copie_attributs.ui" beforeDir="false" afterPath="$PROJECT_DIR$/dial/copie_attributs.ui" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/images/Image0.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/images/Image1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/images/Image10.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/images/Image11.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/images/Image2.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/images/Image3.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/images/Image4.png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/images/Image4.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/images/Image5.png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/images/Image5.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/images/Image6.png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/images/Image6.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/images/Image7.png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/images/Image7.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/images/Image8.png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/images/Image8.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/images/Image9.png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/images/Image9.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/index.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/index.md" afterDir="false" />
-    </list>
+    <list default="true" id="332a3f1d-e0e5-4971-b160-6fbc69902961" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -52,16 +35,16 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "Python.maj_version_on_github.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "0.2.1",
-    "settings.editor.selected.configurable": "jupyter.general.settings"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Python.maj_version_on_github.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;0.2.1&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;jupyter.general.settings&quot;
   }
-}]]></component>
+}</component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>

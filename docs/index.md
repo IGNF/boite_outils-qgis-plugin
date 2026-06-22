@@ -84,32 +84,32 @@ Chaque onglet regroupe plusieurs fonctionnalités
   <h2 id="fusion" style="color: white;margin:0;" >4.1 Fusion</h2>
 </div>
 
-> Pas encore implémenté
+Pas encore implémenté
 
 <div  style="font-size: 10px;background-color: #00ADC5; border: 1px solid black; padding: 5px; text-align: justify;margin-bottom:10px;">
   <h2 id="via" style="color: white;margin:0;" >4.2	<img src="images/image2.png" style="width:0.62509in;height:0.3438in" /></h2>
 </div>
 
-> C’est un outil « d’accrochage »
->
-> <img src="images/image2.png"
-> style="width:0.62509in;height:0.3438in" /> : Accrochage désactivé
->
-> <img src="images/image4.png"
-> style="width:0.63135in;height:0.35075in" /> : Accrochage activé
->
-> On a une entité sélectionnée et elle partage un même sommet avec
-> d’autres entités dans QGIS :
+C’est un outil « d’accrochage »
+
+<img src="images/image2.png"
+style="width:0.62509in;height:0.3438in" /> : Accrochage désactivé
+
+<img src="images/image4.png"
+style="width:0.63135in;height:0.35075in" /> : Accrochage activé
+
+On a une entité sélectionnée et elle partage un même sommet avec
+d’autres entités dans QGIS :
 
 - Lorsque l’accrochage est désactivé :
 
-> Le déplacement du sommet commun ne déplace que le sommet de l’objet
-> sélectionné.
+Le déplacement du sommet commun ne déplace que le sommet de l’objet
+sélectionné.
 
 - Lorsque l’accrochage est activé :
 
-> Le déplacement du sommet commun déplace ce sommet pour toutes les
-> entités.
+Le déplacement du sommet commun déplace ce sommet pour toutes les
+entités.
 
 
 <div  style="background-color: #00ADC5; border: 1px solid black; padding: 5px; text-align: justify;margin-bottom:10px;">
@@ -121,11 +121,11 @@ Chaque onglet regroupe plusieurs fonctionnalités
   <h2 id="copie-dattributs" style="color: white;margin:0;" >5.1 Copie d’attributs</h2>
 </div>
 
-> Cette interface permet la copie d’attributs d’une entité vers une ou
-> plusieurs autres.
->
-> <img src="images/image5.png"
-> style="width:4.15811in;height:2.62752in" />
+Cette interface permet la copie d’attributs d’une entité vers une ou
+plusieurs autres.
+
+<img src="images/image5.png"
+style="width:4.15811in;height:2.62752in" />
 
 <span class="mark">À l’ouverture, cette interface est vide. Elle
 s’initialise dès lors qu’au moins deux entités sont sélectionnées.\

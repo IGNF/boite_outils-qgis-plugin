@@ -11,14 +11,16 @@ Link to the plugin maître : [maitre-qgis-plugin sur GitHub](https://github.com/
 ## Fonctionnalités
 
 French : 
-* Déplacement d'un point commun à plusieurs tronçons.  
+* Déplacement d'un point commun à plusieurs tronçons. 
+* Copie d'attributs entre entités
 * Recherche d'entités par cleabs ou par identifiant
 
 
 
 
 English :
-* Moving a point shared by multiple segments.  
+* Moving a point shared by multiple segments.
+* Copy of attributes between entities
 * Search for entities by CLEABS or by identifier.
 
 

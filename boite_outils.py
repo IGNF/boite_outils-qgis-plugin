@@ -81,20 +81,20 @@ class BoiteOutils:
         layout = QHBoxLayout()
         layout.setContentsMargins(0, 0, 0, 0)
         tab_geom.setLayout(layout)
-        btn_fusion = QPushButton("Fusion")
-        btn_fusion.setFixedHeight(HAUTEUR_BTN)
-        btn_blague = QPushButton("")
-        btn_blague.setFixedHeight(HAUTEUR_BTN)
-        btn_blague.setIcon(self.icon_blague)
-        btn_blague.setIconSize(QSize(25, 25))
-        btn_blague.setStyleSheet("""
+        self.btn_fusion = QPushButton("Fusion")
+        self.btn_fusion.setFixedHeight(HAUTEUR_BTN)
+        self.btn_blague = QPushButton("")
+        self.btn_blague.setFixedHeight(HAUTEUR_BTN)
+        self.btn_blague.setIcon(self.icon_blague)
+        self.btn_blague.setIconSize(QSize(25, 25))
+        self.btn_blague.setStyleSheet("""
             QPushButton {
                 padding: 0px;
             }
         """)
         self.btn_accroche = QPushButton()
         self.btn_accroche.setFixedHeight(HAUTEUR_BTN)
-        btn_fusion.setToolTip("Fusion de linéaires")
+        self.btn_fusion.setToolTip("Fusion de linéaires")
         self.btn_accroche.setToolTip("Mode d'accrochage pour déplacement d'entités")
 
         if QgsProject.instance().topologicalEditing():
@@ -102,12 +102,13 @@ class BoiteOutils:
         else:
             self.btn_accroche.setIcon(self.icon_accroche_vert)
 
-        layout.addWidget(btn_fusion)
-        layout.addWidget(btn_blague)
+        layout.addWidget(self.btn_fusion)
+        layout.addWidget(self.btn_blague)
         layout.addWidget(self.btn_accroche)
         # slot
-        btn_blague.clicked.connect(self.on_btn_blague)
-        self.btn_accroche.clicked.connect(self.on_btn_accroche)
+        self.btn_fusion.clicked.connect(self.on_fusion)
+        self.btn_blague.clicked.connect(self.on_blague)
+        self.btn_accroche.clicked.connect(self.on_accroche)
 
         # ===========init du tab "attr"==================
         layout = QHBoxLayout()
@@ -164,10 +165,12 @@ class BoiteOutils:
         self.dlg_reche_cleabs.show()
 
     def on_affiche_dial_rech(self):
-        pass
+        QMessageBox.information(None,"Information","Cette fonctionnalité n'est pas encore implémentée")
 
+    def on_fusion(self):
+        QMessageBox.information(None,"Information","Cette fonctionnalité n'est pas encore implémentée")
 
-    def on_btn_blague(self):
+    def on_blague(self):
         path = os.path.join(os.path.dirname(__file__), "configure.txt")
         if os.path.exists(path):
             with open(path, "r",encoding="latin-1") as f:
@@ -178,7 +181,7 @@ class BoiteOutils:
             QMessageBox.warning(None,"blagues","fichier introuvable")
         return None
 
-    def on_btn_accroche(self):
+    def on_accroche(self):
         # fonctionne uniquement sur le layer actif (pour l'instant)
         # à voir si pertinent en multilayer)
         projet = QgsProject.instance()

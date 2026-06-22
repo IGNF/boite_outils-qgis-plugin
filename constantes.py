@@ -3,8 +3,8 @@ CLEABS = "cleabs"
 
 CHAMPS_INTERDIT = ["id_sqlite_1gnQg1s","gcms_fingerprint"]
 
-COLOR_LIGNE_COMMUNE = "#46a200"
-COLOR_LIGNE_DIFF = "#dfdfdf"
+# COLOR_LIGNE_COMMUNE = "#46a200"
+# COLOR_LIGNE_DIFF = "#dfdfdf"
 HAUTEUR_BTN = 30
 
 # style des lignes sélectionnées

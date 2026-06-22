@@ -6,8 +6,6 @@ from qgis.PyQt.uic import loadUi
 
 from .constantes import *
 from .mapping_version import *
-COLOR_LIGNE_COMMUNE = "#46a200"
-COLOR_LIGNE_DIFF = "#dfdfdf"
 
 class CopieAttributsDialog(QDialog):
     def __init__(self, parent=None,iface=None):
@@ -19,14 +17,15 @@ class CopieAttributsDialog(QDialog):
         ui_path = os.path.join(os.path.dirname(__file__), "dial", "copie_attributs.ui")
         loadUi(ui_path, self)
 
+        self.label_nbsel.setText("")
         self.label_nbsel.setStyleSheet("color: red;font-weight: bold;")
 
         self.layer = self.iface.activeLayer()
         if self.layer and self.layer.type() == self.layer.VectorLayer:
             self.iface.currentLayerChanged.connect(self.on_layer_changed)
-            # ne se declenche pas si changement de couche
+            # ne se déclenche pas si changement de couche
             self.layer.selectionChanged.connect(self.actualiserSelection)
-            self.actualiserSelection([], [], False)
+            self.actualiserSelection()
 
         self.pushButton_copier.clicked.connect(self.copier_attributs)
 
@@ -35,22 +34,37 @@ class CopieAttributsDialog(QDialog):
         self.ini_tabwidget()
 
     def on_layer_changed(self,layer):
-        self.layer = layer
-        self.selection_order = []
-        self.actualiserSelection()
-
-        if self.layer and self.layer.type() == self.layer.VectorLayer:
-            # Déconnecte les anciens signaux pour éviter les doublons
+        # self.layer = layer
+        # self.selection_order = []
+        # self.actualiserSelection()
+        #
+        # if self.layer and self.layer.type() == self.layer.VectorLayer:
+        #     # Déconnecte les anciens signaux pour éviter les doublons
+        #     try:
+        #         self.layer.selectionChanged.disconnect(self.actualiserSelection)
+        #     except TypeError:
+        #         pass
+        #     # Reconnecte le signal sur la nouvelle couche
+        #     self.layer.selectionChanged.connect(self.actualiserSelection)
+        #
+        #     # Mise à jour immédiate si la nouvelle couche a déjà une sélection
+        #     if self.layer.selectedFeatureCount() > 0:
+        #         self.actualiserSelection([], [], False)
+        old_layer = self.layer
+        if old_layer:
             try:
-                self.layer.selectionChanged.disconnect(self.actualiserSelection)
+                old_layer.selectionChanged.disconnect(self.actualiserSelection)
             except TypeError:
                 pass
-            # Reconnecte le signal sur la nouvelle couche
+        self.layer = layer
+        self.selection_order = []
+        if self.layer and self.layer.type() == self.layer.VectorLayer:
+            print("nom du layer = ",self.layer.name())
+            print("avant :", self.layer.selectedFeatureCount())
+            self.layer.removeSelection()
+            print("après :", self.layer.selectedFeatureCount())
             self.layer.selectionChanged.connect(self.actualiserSelection)
-
-            # Mise à jour immédiate si la nouvelle couche a déjà une sélection
-            if self.layer.selectedFeatureCount() > 0:
-                self.actualiserSelection([], [], False)
+        self.actualiserSelection()
 
 
     def ini_tabwidget(self):
@@ -131,7 +145,7 @@ class CopieAttributsDialog(QDialog):
                 attributs_commun[champ] = "****"
         return attributs_commun
 
-    def get_ordre_selection(self,selected, deselected, clear_and_select):
+    def get_ordre_selection(self,selected, deselected):
         for fid in selected:
             if fid not in self.selection_order:
                 self.selection_order.append(fid)
@@ -147,20 +161,18 @@ class CopieAttributsDialog(QDialog):
         if not self.isVisible():
             return
 
-        if selected is None:
-            selected = []
-        if deselected is None:
-            deselected = []
-        if clear_and_select is None:
-            clear_and_select = False
-        if self.layer is None:
-            self.layer = self.iface.activeLayer()
+        # if clear_and_select is None:
+        #     clear_and_select = False
         if self.layer is None:
             return
 
         self.tableWidget.clearSelection()
 
-        self.get_ordre_selection(selected, deselected, clear_and_select)
+        if selected is None:
+            selected = []
+        if deselected is None:
+            deselected = []
+        self.get_ordre_selection(selected, deselected)
 
         nb_sel = self.layer.selectedFeatureCount()
         self.label_nbsel.setText(f"Sélection : {nb_sel}")

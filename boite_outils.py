@@ -140,11 +140,13 @@ class BoiteOutils:
         self.dlg.setFixedSize(self.dlg.size())
 
     def on_affiche_dial_copie_attr(self):
-        self.dlg_copie_attr = CopieAttributsDialog(None,self.iface)
-        self.dlg_copie_attr.setWindowFlags(Window |WindowStaysOnTopHint | WindowCloseButtonHint)
+        self.dlg_copie_attr = CopieAttributsDialog(self.iface.mainWindow(),self.iface)
+        self.dlg_copie_attr.setWindowFlags(Window | WindowCloseButtonHint)
         self.dlg_copie_attr.setWindowTitle("Copie d'attributs")
         self.dlg_copie_attr.show()
-        # self.dlg_copie_attr.actualiserSelection()
+        # une seule instance à la fois
+        if hasattr(self, "dlg_copie_attr"):
+            return
         result = self.dlg_copie_attr.exec()
         if result == 0:
             try:
@@ -155,8 +157,8 @@ class BoiteOutils:
                 pass  # aucune connexion existante
 
     def on_affiche_dial_rechcleabs(self):
-        self.dlg_reche_cleabs = RechercheCleabsDialog(None,self.iface)
-        self.dlg_reche_cleabs.setWindowFlags(WindowStaysOnTopHint | WindowCloseButtonHint)
+        self.dlg_reche_cleabs = RechercheCleabsDialog(self.iface.mainWindow(),self.iface)
+        self.dlg_reche_cleabs.setWindowFlags(Window | WindowCloseButtonHint)
         self.dlg_reche_cleabs.setWindowTitle("Recherche par CLEABS")
         self.dlg_reche_cleabs.setFixedSize(self.dlg_reche_cleabs.size())
         self.dlg_reche_cleabs.show()

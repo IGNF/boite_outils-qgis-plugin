@@ -24,6 +24,7 @@
 import random
 import webbrowser
 
+from qgis.utils import plugins
 from qgis.PyQt.QtCore import QSize
 from qgis.PyQt.QtWidgets import QWidget, QHBoxLayout, QPushButton,  QMessageBox
 from qgis.PyQt.QtGui import QIcon
@@ -166,6 +167,16 @@ class BoiteOutils:
 
     def on_affiche_dial_rech(self):
         QMessageBox.information(None,"Information","Cette fonctionnalité n'est pas encore implémentée")
+        # test de creation d'une liste
+        try:
+            processing_plugin = plugins[PLUGIN_LISTE]
+            processing_plugin.creerliste(nom_list="controle 1")
+            # dico de la forme {"nom_layer":[id1,id2,...]}
+            layer_ids = {"troncon_hydrographique": [1842, 1948, 1849]}
+            processing_plugin.update_liste(nom_liste="controle 1",dico_ids=layer_ids)
+        except Exception as e:
+            print(f"Erreur : {e}")
+
 
     def on_fusion(self):
         QMessageBox.information(None,"Information","Cette fonctionnalité n'est pas encore implémentée")
@@ -193,43 +204,6 @@ class BoiteOutils:
             self.btn_accroche.setIcon(self.icon_accroche_rouge)
             projet.setTopologicalEditing(True)
 
-            # self.iface.activeLayer().vertexMoved.connect(self.on_vertex_moved)
-
-            # passer toutes les couches en edition topologique
-            # for layer in QgsProject.instance().mapLayers().values():
-            #     if isinstance(layer, QgsVectorLayer) and not layer.isEditable():
-            #         layer.startEditing()
-            # snapping = projet.snappingConfig()
-            # snapping.setEnabled(True)
-            # snapping.setMode(QgsSnappingConfig.SnappingMode.AllLayers)
-            # projet.setSnappingConfig(snapping)
-
-    # def on_vertex_moved(fid, vertex_id, old_pos, new_pos):
-    #     """
-    #     fid      : ID de l'entité
-    #     vertex_id: indice du vertex
-    #     old_pos  : QgsPointXY avant déplacement
-    #     new_pos  : QgsPointXY après déplacement
-    #     """
-    #     print(f"Vertex {vertex_id} de l'entité {fid} déplacé")
-    #     print("Old position:", old_pos, "New position:", new_pos)
-
-    # def get_layers_pt_commun(self,point):
-    #     """
-    #     Retourne la liste des couches vectorielles ayant un sommet exactement sur 'point'
-    #     """
-    #     layers_to_edit = []
-    #     for layer in QgsProject.instance().mapLayers().values():
-    #         if isinstance(layer, QgsVectorLayer):
-    #             for feat in layer.getFeatures():
-    #                 geom = feat.geometry()
-    #                 if geom.type() == 0:  # 0 = point, 1 = ligne, 2 = polygone
-    #                     # Pour les lignes/polygones, on check chaque vertex
-    #                     vertices = geom.vertices()
-    #                     if any(QgsPointXY(v) == point for v in vertices):
-    #                         layers_to_edit.append(layer)
-    #                         break
-    #     return layers_to_edit
 
     def run(self):
         project = QgsProject.instance()

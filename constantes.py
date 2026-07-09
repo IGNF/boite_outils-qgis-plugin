@@ -2,7 +2,7 @@ TITRE = "Boite à outils"
 CLEABS = "cleabs"
 
 PLUGIN_LISTE = "IGN_assistant-liste"
-
+PLUGIN_REQUETE = "IGN_requetes"
 CHAMPS_INTERDIT = ["id_sqlite_1gnQg1s","gcms_fingerprint"]
 
 # COLOR_LIGNE_COMMUNE = "#46a200"

@@ -24,17 +24,16 @@
 import random
 import webbrowser
 
+from qgis.core import QgsApplication
 from qgis.utils import plugins
-from qgis.PyQt.QtCore import QSize
-from qgis.PyQt.QtWidgets import QWidget, QHBoxLayout, QPushButton,  QMessageBox
+from qgis.PyQt.QtWidgets import QWidget, QHBoxLayout, QPushButton,QMessageBox
 from qgis.PyQt.QtGui import QIcon
 
 # Import the code for the dialog
 from .boite_outils_dialog import BoiteOutilsDialog
 from .rech_cleabs import *
 from .copie_attributs import *
-from .mapping_version import *
-
+from.window_manager import *
 
 class BoiteOutils:
     """QGIS Plugin Implementation."""
@@ -49,8 +48,9 @@ class BoiteOutils:
         self.icon_blague = QIcon(os.path.join(os.path.dirname(__file__), "icons", "blagues.png"))
 
     def initGui(self):
-        pass
-        """Create the menu entries and toolbar icons inside the QGIS GUI."""
+        self.iface.projectRead.connect(self.on_project_opened)
+        # événement fermeture de qgis
+        QgsApplication.instance().aboutToQuit.connect(self.fermeture_qgis)
 
     def unload(self):
         pass
@@ -166,7 +166,16 @@ class BoiteOutils:
         self.dlg_reche_cleabs.show()
 
     def on_affiche_dial_rech(self):
-        QMessageBox.information(None,"Information","Cette fonctionnalité n'est pas encore implémentée")
+        QMessageBox.information(None,"Information","En cours de développement...")
+        # ==========================================
+        # test affichage interface de recherche du plugin requete
+        try:
+            processing_plugin = plugins[PLUGIN_REQUETE]
+            processing_plugin.on_recherche()
+        except Exception as e:
+            print(f"Erreur : {e}")
+
+        # ==========================================
         # test de creation d'une liste
         try:
             processing_plugin = plugins[PLUGIN_LISTE]
@@ -204,6 +213,18 @@ class BoiteOutils:
             self.btn_accroche.setIcon(self.icon_accroche_rouge)
             projet.setTopologicalEditing(True)
 
+    def on_project_opened(self):
+        settings = QSettings(NativeFormat, UserScope, "IGN", TITRE)
+        visible = settings.value("visible", False, type=bool)
+        if visible:
+            self.run()
+
+    def on_dialog_closed(self):
+        sauve_position_dial(self.dlg)
+        self.dlg = None
+
+    def fermeture_qgis(self):
+        sauve_position_dial(self.dlg)
 
     def run(self):
         project = QgsProject.instance()
@@ -221,14 +242,13 @@ class BoiteOutils:
         self.dlg.setParent(self.iface.mainWindow())
         self.dlg.setWindowFlags(Dialog | WindowTitleHint | WindowCloseButtonHint)
         self.dlg.setWindowTitle(TITRE)
+
+        # connection de la fermeture du dialogue
+        self.dlg.finished.connect(self.on_dialog_closed)
+        restore_position_dial(self.dlg)
+
         self.dlg.show()
 
         self.ini_tabwidget()
 
-        # Run the dialog event loop
-        result = self.dlg.exec()
-        # See if OK was pressed
-        if result:
-            # Do something useful here - delete the line containing pass and
-            # substitute with your code.
-            pass
+

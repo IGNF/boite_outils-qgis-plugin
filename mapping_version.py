@@ -1,5 +1,5 @@
-from qgis.PyQt.QtCore import Qt
-from qgis.PyQt.QtWidgets import QTabBar,QMessageBox,QAbstractItemView,QListWidget
+from qgis.PyQt.QtCore import Qt,QSettings
+from qgis.PyQt.QtWidgets import QAbstractItemView
 
 # QT6
 try :
@@ -32,6 +32,8 @@ try :
     yellow = Qt.GlobalColor.yellow
     # DisplayRole = Qt.ItemDataRole.DisplayRole
     # WA_DeleteOnClose = Qt.WidgetAttribute.WA_DeleteOnClose
+    NativeFormat = QSettings.Format.NativeFormat
+    UserScope = QSettings.Scope.UserScope
 # QT5
 except :
     Dialog = Qt.Dialog
@@ -63,3 +65,5 @@ except :
     yellow = Qt.yellow
     # DisplayRole = Qt.DisplayRole
     # WA_DeleteOnClose = Qt.WA_DeleteOnClose
+    NativeFormat = QSettings.NativeFormat
+    UserScope = QSettings.UserScope

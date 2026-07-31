@@ -24,16 +24,16 @@
 import random
 import webbrowser
 
-from qgis.PyQt.QtCore import QSize
-from qgis.PyQt.QtWidgets import QWidget, QHBoxLayout, QPushButton,  QMessageBox
+from qgis.core import QgsApplication
+from qgis.utils import plugins
+from qgis.PyQt.QtWidgets import QWidget, QHBoxLayout, QPushButton,QMessageBox
 from qgis.PyQt.QtGui import QIcon
 
 # Import the code for the dialog
 from .boite_outils_dialog import BoiteOutilsDialog
 from .rech_cleabs import *
 from .copie_attributs import *
-from .mapping_version import *
-
+from.window_manager import *
 
 class BoiteOutils:
     """QGIS Plugin Implementation."""
@@ -48,8 +48,9 @@ class BoiteOutils:
         self.icon_blague = QIcon(os.path.join(os.path.dirname(__file__), "icons", "blagues.png"))
 
     def initGui(self):
-        pass
-        """Create the menu entries and toolbar icons inside the QGIS GUI."""
+        self.iface.projectRead.connect(self.on_project_opened)
+        # événement fermeture de qgis
+        QgsApplication.instance().aboutToQuit.connect(self.fermeture_qgis)
 
     def unload(self):
         pass
@@ -165,7 +166,26 @@ class BoiteOutils:
         self.dlg_reche_cleabs.show()
 
     def on_affiche_dial_rech(self):
-        QMessageBox.information(None,"Information","Cette fonctionnalité n'est pas encore implémentée")
+        QMessageBox.information(None,"Information","En cours de développement...")
+        # ==========================================
+        # test affichage interface de recherche du plugin requete
+        try:
+            processing_plugin = plugins[PLUGIN_REQUETE]
+            processing_plugin.on_recherche()
+        except Exception as e:
+            print(f"Erreur : {e}")
+
+        # ==========================================
+        # test de creation d'une liste
+        try:
+            processing_plugin = plugins[PLUGIN_LISTE]
+            processing_plugin.creerliste(nom_list="controle 1")
+            # dico de la forme {"nom_layer":[id1,id2,...]}
+            layer_ids = {"troncon_hydrographique": [1842, 1948, 1849]}
+            processing_plugin.update_liste(nom_liste="controle 1",dico_ids=layer_ids)
+        except Exception as e:
+            print(f"Erreur : {e}")
+
 
     def on_fusion(self):
         QMessageBox.information(None,"Information","Cette fonctionnalité n'est pas encore implémentée")
@@ -193,43 +213,18 @@ class BoiteOutils:
             self.btn_accroche.setIcon(self.icon_accroche_rouge)
             projet.setTopologicalEditing(True)
 
-            # self.iface.activeLayer().vertexMoved.connect(self.on_vertex_moved)
+    def on_project_opened(self):
+        settings = QSettings(NativeFormat, UserScope, "IGN", TITRE)
+        visible = settings.value("visible", False, type=bool)
+        if visible:
+            self.run()
 
-            # passer toutes les couches en edition topologique
-            # for layer in QgsProject.instance().mapLayers().values():
-            #     if isinstance(layer, QgsVectorLayer) and not layer.isEditable():
-            #         layer.startEditing()
-            # snapping = projet.snappingConfig()
-            # snapping.setEnabled(True)
-            # snapping.setMode(QgsSnappingConfig.SnappingMode.AllLayers)
-            # projet.setSnappingConfig(snapping)
+    def on_dialog_closed(self):
+        sauve_position_dial(self.dlg)
+        self.dlg = None
 
-    # def on_vertex_moved(fid, vertex_id, old_pos, new_pos):
-    #     """
-    #     fid      : ID de l'entité
-    #     vertex_id: indice du vertex
-    #     old_pos  : QgsPointXY avant déplacement
-    #     new_pos  : QgsPointXY après déplacement
-    #     """
-    #     print(f"Vertex {vertex_id} de l'entité {fid} déplacé")
-    #     print("Old position:", old_pos, "New position:", new_pos)
-
-    # def get_layers_pt_commun(self,point):
-    #     """
-    #     Retourne la liste des couches vectorielles ayant un sommet exactement sur 'point'
-    #     """
-    #     layers_to_edit = []
-    #     for layer in QgsProject.instance().mapLayers().values():
-    #         if isinstance(layer, QgsVectorLayer):
-    #             for feat in layer.getFeatures():
-    #                 geom = feat.geometry()
-    #                 if geom.type() == 0:  # 0 = point, 1 = ligne, 2 = polygone
-    #                     # Pour les lignes/polygones, on check chaque vertex
-    #                     vertices = geom.vertices()
-    #                     if any(QgsPointXY(v) == point for v in vertices):
-    #                         layers_to_edit.append(layer)
-    #                         break
-    #     return layers_to_edit
+    def fermeture_qgis(self):
+        sauve_position_dial(self.dlg)
 
     def run(self):
         project = QgsProject.instance()
@@ -247,14 +242,13 @@ class BoiteOutils:
         self.dlg.setParent(self.iface.mainWindow())
         self.dlg.setWindowFlags(Dialog | WindowTitleHint | WindowCloseButtonHint)
         self.dlg.setWindowTitle(TITRE)
+
+        # connection de la fermeture du dialogue
+        self.dlg.finished.connect(self.on_dialog_closed)
+        restore_position_dial(self.dlg)
+
         self.dlg.show()
 
         self.ini_tabwidget()
 
-        # Run the dialog event loop
-        result = self.dlg.exec()
-        # See if OK was pressed
-        if result:
-            # Do something useful here - delete the line containing pass and
-            # substitute with your code.
-            pass
+
